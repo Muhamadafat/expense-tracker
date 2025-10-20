@@ -1,19 +1,30 @@
 <?php
 // Konfigurasi Database
 // Gunakan environment variables untuk Railway, fallback ke localhost untuk development
-define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
-define('DB_USER', getenv('DB_USER') ?: 'root');
-define('DB_PASS', getenv('DB_PASS') ?: '');
-define('DB_NAME', getenv('DB_NAME') ?: 'expense_tracker');
 
-// Railway biasanya menyediakan MYSQLDATABASE, MYSQLHOST, dll
-if (getenv('MYSQLHOST')) {
+// Parse MYSQL_URL jika ada (format: mysql://user:password@host:port/database)
+if (getenv('MYSQL_URL')) {
+    $db_url = parse_url(getenv('MYSQL_URL'));
+    define('RAILWAY_DB_HOST', $db_url['host']);
+    define('RAILWAY_DB_USER', $db_url['user']);
+    define('RAILWAY_DB_PASS', $db_url['pass']);
+    define('RAILWAY_DB_NAME', ltrim($db_url['path'], '/'));
+    define('RAILWAY_DB_PORT', isset($db_url['port']) ? $db_url['port'] : 3306);
+}
+// Railway juga bisa menyediakan individual variables
+elseif (getenv('MYSQLHOST')) {
     define('RAILWAY_DB_HOST', getenv('MYSQLHOST'));
     define('RAILWAY_DB_USER', getenv('MYSQLUSER'));
     define('RAILWAY_DB_PASS', getenv('MYSQLPASSWORD'));
     define('RAILWAY_DB_NAME', getenv('MYSQLDATABASE'));
     define('RAILWAY_DB_PORT', getenv('MYSQLPORT') ?: 3306);
 }
+
+// Fallback untuk local development
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_USER', getenv('DB_USER') ?: 'root');
+define('DB_PASS', getenv('DB_PASS') ?: '');
+define('DB_NAME', getenv('DB_NAME') ?: 'expense_tracker');
 
 // Koneksi ke database
 function getDBConnection() {
