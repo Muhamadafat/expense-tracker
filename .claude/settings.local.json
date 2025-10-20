@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"/c/laragon/bin/mysql/mysql-8.4.3-winx64/bin/mysql.exe\" -u root -e \"USE expense_tracker; SHOW TABLES; SELECT COUNT(*) as total_expenses FROM expenses;\")",
+      "Bash(\"/c/laragon/bin/php/php.exe\":*)",
+      "Bash(\"/c/laragon/bin/php/php-8.3.16-Win32-vs16-x64/php.exe\":*)",
+      "WebFetch(domain:windows.php.net)",
+      "Bash(unzip:*)",
+      "Bash(\"/c/laragon/bin/php/php-8.4.13-nts-Win32-vs17-x64/php.exe\":*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
